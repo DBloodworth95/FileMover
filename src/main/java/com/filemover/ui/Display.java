@@ -33,7 +33,7 @@ public class Display extends JFrame implements ActionListener {
 
     public Display() {
         setTitle(TITLE);
-        setSize(400,400);
+        setSize(400, 400);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -42,9 +42,9 @@ public class Display extends JFrame implements ActionListener {
     }
 
     private void setupComponents() {
-        numberOfFilesToMoveL.setBounds(100,50, 200,20);
-        addFileBtn.setBounds(10,200, 130,30);
-        moveFilesBtn.setBounds(250,200, 130,30);
+        numberOfFilesToMoveL.setBounds(100, 50, 200, 20);
+        addFileBtn.setBounds(10, 200, 130, 30);
+        moveFilesBtn.setBounds(250, 200, 130, 30);
         addFileBtn.addActionListener(this);
         moveFilesBtn.addActionListener(this);
         add(numberOfFilesToMoveL);
@@ -58,9 +58,8 @@ public class Display extends JFrame implements ActionListener {
             int fileChooserOption = fileChooser.showOpenDialog(Display.this);
 
             if (fileChooserOption == JFileChooser.APPROVE_OPTION)
-            handleFileSelection(fileChooser);
-        }
-        else if (actionEvent.getSource() == moveFilesBtn) {
+                handleFileSelection(fileChooser);
+        } else if (actionEvent.getSource() == moveFilesBtn) {
             int fileChooserOption = fileChooser.showOpenDialog(Display.this);
 
             if (fileChooserOption == JFileChooser.APPROVE_OPTION) {
