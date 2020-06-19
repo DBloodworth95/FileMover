@@ -97,6 +97,7 @@ public class Display extends JFrame implements ActionListener {
         for (Thread thread : threads) {
             try {
                 thread.join();
+                threads.clear();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
