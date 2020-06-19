@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,7 +82,9 @@ public class Display extends JFrame implements ActionListener {
     private void handleNewFileDestination(JFileChooser fileChooser) throws IOException {
         fileChooser.setAcceptAllFileFilterUsed(false);
         for (File file : fileList) {
-            Files.move(file.toPath(), fileChooser.getCurrentDirectory().toPath());
+            Path source = file.toPath();
+            Path newDestination = fileChooser.getCurrentDirectory().toPath();
+            Files.move(source, newDestination.resolve(source.getFileName()), StandardCopyOption.REPLACE_EXISTING);
         }
         System.out.println("Files moved!");
     }
