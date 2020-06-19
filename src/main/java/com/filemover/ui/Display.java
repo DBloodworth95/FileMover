@@ -1,5 +1,7 @@
 package com.filemover.ui;
 
+import com.filemover.thread.FileMoverThread;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,6 +30,8 @@ public class Display extends JFrame implements ActionListener {
     private final JFileChooser fileChooser = new JFileChooser();
 
     private final List<File> fileList = new ArrayList<>(TOTAL_FILE_AMOUNT);
+
+    private final List<FileMoverThread> threads = new ArrayList<>();
 
     public Display() {
         setTitle(TITLE);
@@ -85,7 +89,14 @@ public class Display extends JFrame implements ActionListener {
             Path source = file.toPath();
             Path newDestination = fileChooser.getCurrentDirectory().toPath();
             Files.move(source, newDestination.resolve(source.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+            threads.add(new FileMoverThread(file, source, newDestination));
         }
+        System.out.println("Files loaded into threads!");
+
+        for (Thread thread : threads) {
+            thread.start();
+        }
+
         System.out.println("Files moved!");
     }
 }
