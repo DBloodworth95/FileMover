@@ -95,6 +95,14 @@ public class Display extends JFrame implements ActionListener {
             thread.start();
         }
 
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         System.out.println("Files moved!");
     }
 }
