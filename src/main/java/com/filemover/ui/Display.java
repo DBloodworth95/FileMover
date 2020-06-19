@@ -17,8 +17,6 @@ public class Display extends JFrame implements ActionListener {
 
     private static final String TITLE = "Dan's File Mover";
 
-    private static final int TOTAL_FILE_AMOUNT = 5;
-
     private int numberOfFiles = 0;
 
     private final JLabel numberOfFilesToMoveL = new JLabel(numberOfFiles + "/5 files are ready to move.");
@@ -29,7 +27,7 @@ public class Display extends JFrame implements ActionListener {
 
     private final JFileChooser fileChooser = new JFileChooser();
 
-    private final List<File> fileList = new ArrayList<>(TOTAL_FILE_AMOUNT);
+    private final List<File> fileList = new ArrayList<>();
 
     private final List<FileMoverThread> threads = new ArrayList<>();
 
@@ -79,7 +77,7 @@ public class Display extends JFrame implements ActionListener {
         File file = fileChooser.getSelectedFile();
         fileList.add(file);
         ++numberOfFiles;
-        numberOfFilesToMoveL.setText(numberOfFiles + "/5 files are ready to move.");
+        numberOfFilesToMoveL.setText("Number of files ready to move: " + numberOfFiles);
         System.out.println(file.getName() + " has been added to the file list!");
     }
 
