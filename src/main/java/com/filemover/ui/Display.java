@@ -23,6 +23,8 @@ public class Display extends JFrame implements ActionListener {
 
     private static final String TITLE = "Dan's File Mover";
 
+    private static final int MAX_FILES = 5;
+
     private int numberOfFiles = 0;
 
     private final JLabel numberOfFilesToMoveL = new JLabel(numberOfFiles + "/5 files are ready to move.");
@@ -33,11 +35,11 @@ public class Display extends JFrame implements ActionListener {
 
     private final JFileChooser fileChooser = new JFileChooser();
 
-    private final List<File> fileList = new ArrayList<>();
+    private final List<File> fileList = new ArrayList<>(MAX_FILES);
 
     private final ExecutorService executors = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-    private final CyclicBarrier barrier = new CyclicBarrier(4, this::whenDone);
+    private final CyclicBarrier barrier = new CyclicBarrier(5, this::whenDone);
 
     public Display() {
         setTitle(TITLE);
@@ -82,14 +84,18 @@ public class Display extends JFrame implements ActionListener {
         File file = fileChooser.getSelectedFile();
         fileList.add(file);
         ++numberOfFiles;
-        numberOfFilesToMoveL.setText("Number of files ready to move: " + numberOfFiles);
+        numberOfFilesToMoveL.setText(numberOfFiles + "/5 files are ready to move.");
         System.out.println(file.getName() + " has been added to the file list!");
     }
 
     //Invoked when the user chooses a new file path.
     private void handleNewFileDestination(JFileChooser fileChooser) {
         fileChooser.setAcceptAllFileFilterUsed(false);
+
+        if (fileList.size() == MAX_FILES)
         doPar();
+        else
+            JOptionPane.showMessageDialog(null, "Please add more files before trying to move!");
     }
 
     //Schedules worker threads to move the files in parallel.
