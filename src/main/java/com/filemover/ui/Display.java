@@ -27,7 +27,7 @@ public class Display extends JFrame implements ActionListener {
 
     private int numberOfFiles = 0;
 
-    private final JLabel numberOfFilesToMoveL = new JLabel(numberOfFiles + "/5 files are ready to move.");
+    private final JLabel numberOfFilesToMoveL = new JLabel(numberOfFiles + "/2 files are ready to move.");
 
     private final JLabel namingConventionL = new JLabel("Your file convention:");
 
@@ -94,7 +94,7 @@ public class Display extends JFrame implements ActionListener {
         File file = fileChooser.getSelectedFile();
         fileList.add(file);
         ++numberOfFiles;
-        numberOfFilesToMoveL.setText(numberOfFiles + "/5 files are ready to move.");
+        numberOfFilesToMoveL.setText(numberOfFiles + "/2 files are ready to move.");
         System.out.println(file.getName() + " has been added to the file list!");
     }
 
