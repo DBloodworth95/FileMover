@@ -1,17 +1,17 @@
 package com.filemover.ui;
 
-import com.filemover.thread.FileMoverThread;
+import com.filemover.thread.Worker;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Display extends JFrame implements ActionListener {
 
@@ -29,7 +29,9 @@ public class Display extends JFrame implements ActionListener {
 
     private final List<File> fileList = new ArrayList<>();
 
-    private final List<FileMoverThread> threads = new ArrayList<>();
+    private final ExecutorService executors = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+    private final CyclicBarrier barrier = new CyclicBarrier(4, this::whenDone);
 
     public Display() {
         setTitle(TITLE);
@@ -62,14 +64,17 @@ public class Display extends JFrame implements ActionListener {
         } else if (actionEvent.getSource() == moveFilesBtn) {
             int fileChooserOption = fileChooser.showOpenDialog(Display.this);
 
-            if (fileChooserOption == JFileChooser.APPROVE_OPTION) {
-                try {
-                    handleNewFileDestination(fileChooser);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            if (fileChooserOption == JFileChooser.APPROVE_OPTION)
+                handleNewFileDestination(fileChooser);
         }
+    }
+
+    public void doPar(Path source, Path newDestination) {
+        executors.submit(new Worker(barrier, source, newDestination));
+    }
+
+    private void whenDone() {
+
     }
 
     private void handleFileSelection(JFileChooser fileChooser) {
@@ -80,29 +85,13 @@ public class Display extends JFrame implements ActionListener {
         System.out.println(file.getName() + " has been added to the file list!");
     }
 
-    private void handleNewFileDestination(JFileChooser fileChooser) throws IOException {
+    private void handleNewFileDestination(JFileChooser fileChooser) {
         fileChooser.setAcceptAllFileFilterUsed(false);
         for (File file : fileList) {
             Path source = file.toPath();
             Path newDestination = fileChooser.getCurrentDirectory().toPath();
-            Files.move(source, newDestination.resolve(source.getFileName()), StandardCopyOption.REPLACE_EXISTING);
-            threads.add(new FileMoverThread(file, source, newDestination));
+            doPar(source, newDestination);
         }
-        System.out.println("Files loaded into threads!");
-
-        for (Thread thread : threads) {
-            thread.start();
-        }
-
-        for (Thread thread : threads) {
-            try {
-                thread.join();
-                threads.clear();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
         System.out.println("Files moved!");
     }
 }
