@@ -13,6 +13,12 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/*
+ * A simple program that allows the user to select many files.
+ * The user can select a new destination folder for these files.
+ * The program will then assign a separate thread to each file moving task.
+ * The threads will be executed in parallel in an attempt to maximize performance.
+ */
 public class Display extends JFrame implements ActionListener {
 
     private static final String TITLE = "Dan's File Mover";
@@ -43,6 +49,7 @@ public class Display extends JFrame implements ActionListener {
         setupComponents();
     }
 
+    //Sets up the components of the JFrame
     private void setupComponents() {
         numberOfFilesToMoveL.setBounds(100, 50, 200, 20);
         addFileBtn.setBounds(10, 200, 130, 30);
@@ -54,6 +61,7 @@ public class Display extends JFrame implements ActionListener {
         add(moveFilesBtn);
     }
 
+    //Event handler for the buttons.
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource() == addFileBtn) {
@@ -69,14 +77,7 @@ public class Display extends JFrame implements ActionListener {
         }
     }
 
-    public void doPar(Path source, Path newDestination) {
-        executors.submit(new Worker(barrier, source, newDestination));
-    }
-
-    private void whenDone() {
-
-    }
-
+    //Invoked when the user clicks "Select file".
     private void handleFileSelection(JFileChooser fileChooser) {
         File file = fileChooser.getSelectedFile();
         fileList.add(file);
@@ -85,13 +86,25 @@ public class Display extends JFrame implements ActionListener {
         System.out.println(file.getName() + " has been added to the file list!");
     }
 
+    //Invoked when the user chooses a new file path.
     private void handleNewFileDestination(JFileChooser fileChooser) {
         fileChooser.setAcceptAllFileFilterUsed(false);
+        doPar();
+    }
+
+    //Schedules worker threads to move the files in parallel.
+    public void doPar() {
         for (File file : fileList) {
             Path source = file.toPath();
             Path newDestination = fileChooser.getCurrentDirectory().toPath();
-            doPar(source, newDestination);
+            executors.submit(new Worker(barrier, source, newDestination));
+            System.out.println("Sending worker out to move from: " + source + " to: " + newDestination);
         }
+        fileList.clear();
+    }
+
+    //Cleans up the workers, ready for another file moving operation.
+    private void whenDone() {
         System.out.println("Files moved!");
     }
 }

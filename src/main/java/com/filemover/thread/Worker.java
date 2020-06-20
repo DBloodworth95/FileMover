@@ -20,10 +20,12 @@ public final class Worker implements Runnable {
         this.destination = destination;
     }
 
+    //Moves a file from the source to the destination.
     private void moveFile(Path source, Path destination) throws IOException {
         Files.move(source, destination.resolve(source.getFileName()), StandardCopyOption.REPLACE_EXISTING);
     }
 
+    //Invoked when submitted to the ExecutorService, waits at the barrier until all processes are finished.
     @Override
     public void run() {
         try {
