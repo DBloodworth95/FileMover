@@ -41,7 +41,7 @@ public class Display extends JFrame implements ActionListener {
 
     private final ExecutorService executors = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-    private int fileTracker = 0;
+    private int conventionIncrement = 0;
 
     public Display() {
         setTitle(TITLE);
@@ -108,10 +108,10 @@ public class Display extends JFrame implements ActionListener {
     public void doPar() {
         CyclicBarrier barrier = new CyclicBarrier(fileList.size(), this::whenDone);
         for (File file : fileList) {
-            fileTracker++;
+            conventionIncrement++;
             Path source = file.toPath();
             Path newDestination = fileChooser.getCurrentDirectory().toPath();
-            String namingConvention = namingConventionTF.getText() + fileTracker;
+            String namingConvention = namingConventionTF.getText() + conventionIncrement;
             executors.submit(new Worker(barrier, source, newDestination, namingConvention));
             System.out.println("Sending worker out to move from: " + source + " to: " + newDestination);
         }
