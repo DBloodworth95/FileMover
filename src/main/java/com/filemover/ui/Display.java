@@ -23,7 +23,7 @@ public class Display extends JFrame implements ActionListener {
 
     private static final String TITLE = "Dan's File Mover";
 
-    private static final int MAX_FILES = 5;
+    private static final int MAX_FILES = 2;
 
     private int numberOfFiles = 0;
 
@@ -43,7 +43,9 @@ public class Display extends JFrame implements ActionListener {
 
     private final ExecutorService executors = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-    private final CyclicBarrier barrier = new CyclicBarrier(5, this::whenDone);
+    private final CyclicBarrier barrier = new CyclicBarrier(2, this::whenDone);
+
+    private int fileTracker = 0;
 
     public Display() {
         setTitle(TITLE);
@@ -109,9 +111,11 @@ public class Display extends JFrame implements ActionListener {
     //Schedules worker threads to move the files in parallel.
     public void doPar() {
         for (File file : fileList) {
+            fileTracker++;
             Path source = file.toPath();
             Path newDestination = fileChooser.getCurrentDirectory().toPath();
-            executors.submit(new Worker(barrier, source, newDestination));
+            String namingConvention = namingConventionTF.getText() + fileTracker;
+            executors.submit(new Worker(barrier, source, newDestination, namingConvention));
             System.out.println("Sending worker out to move from: " + source + " to: " + newDestination);
         }
         fileList.clear();
