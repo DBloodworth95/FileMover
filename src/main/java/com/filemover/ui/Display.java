@@ -90,7 +90,7 @@ public class Display extends JFrame implements ActionListener {
         File file = fileChooser.getSelectedFile();
         fileList.add(file);
         ++numberOfFiles;
-        numberOfFilesToMoveL.setText(numberOfFiles + "/2 files are ready to move.");
+        numberOfFilesToMoveL.setText(numberOfFiles + " files are ready to move.");
         System.out.println(file.getName() + " has been added to the file list!");
     }
 
