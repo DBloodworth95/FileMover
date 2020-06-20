@@ -27,6 +27,7 @@ public final class Worker implements Runnable {
     private void moveFile() throws IOException {
         Files.move(source, destination.resolve(source.getFileName()), StandardCopyOption.REPLACE_EXISTING);
     }
+
     //Copies the files and renames the copies to the new naming convention.
     private void renameFile() throws IOException {
         Files.copy(destination.resolve(source.getFileName()), destination.resolve(convention), StandardCopyOption.REPLACE_EXISTING);

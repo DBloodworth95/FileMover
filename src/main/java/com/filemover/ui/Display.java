@@ -63,7 +63,7 @@ public class Display extends JFrame implements ActionListener {
         addFileBtn.setBounds(10, 200, 130, 30);
         moveFilesBtn.setBounds(250, 200, 130, 30);
         namingConventionL.setBounds(20, 400, 150, 10);
-        namingConventionTF.setBounds(200, 400, 150,20);
+        namingConventionTF.setBounds(200, 400, 150, 20);
         addFileBtn.addActionListener(this);
         moveFilesBtn.addActionListener(this);
         add(numberOfFilesToMoveL);
@@ -103,7 +103,7 @@ public class Display extends JFrame implements ActionListener {
         fileChooser.setAcceptAllFileFilterUsed(false);
 
         if (fileList.size() == MAX_FILES)
-        doPar();
+            doPar();
         else
             JOptionPane.showMessageDialog(null, "Please add more files before trying to move!");
     }
