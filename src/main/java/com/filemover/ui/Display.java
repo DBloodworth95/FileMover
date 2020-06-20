@@ -29,6 +29,10 @@ public class Display extends JFrame implements ActionListener {
 
     private final JLabel numberOfFilesToMoveL = new JLabel(numberOfFiles + "/5 files are ready to move.");
 
+    private final JLabel namingConventionL = new JLabel("Your file convention:");
+
+    private final JTextField namingConventionTF = new JTextField();
+
     private final JButton addFileBtn = new JButton("Select file");
 
     private final JButton moveFilesBtn = new JButton("Move files");
@@ -43,7 +47,7 @@ public class Display extends JFrame implements ActionListener {
 
     public Display() {
         setTitle(TITLE);
-        setSize(400, 400);
+        setSize(400, 600);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -56,11 +60,15 @@ public class Display extends JFrame implements ActionListener {
         numberOfFilesToMoveL.setBounds(100, 50, 200, 20);
         addFileBtn.setBounds(10, 200, 130, 30);
         moveFilesBtn.setBounds(250, 200, 130, 30);
+        namingConventionL.setBounds(20, 400, 150, 10);
+        namingConventionTF.setBounds(200, 400, 150,20);
         addFileBtn.addActionListener(this);
         moveFilesBtn.addActionListener(this);
         add(numberOfFilesToMoveL);
         add(addFileBtn);
         add(moveFilesBtn);
+        add(namingConventionL);
+        add(namingConventionTF);
     }
 
     //Event handler for the buttons.
